@@ -5,26 +5,50 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: [true, 'Email is required.'],
+      required: [true, "Email is required."],
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
+    },
+    username: {
+      type: String,
+      required: [true, "username is required"],
+      unique: true,
+      trim: true,
     },
     password: {
       type: String,
-      required: [true, 'Password is required.']
+      required: [true, "Password is required."],
     },
-    name: { 
+    image: {
       type: String,
-      required: [true, 'Name is required.']
-    },    
+      //
+    },
+    collections: [
+      {
+        type: Schema.Types.ObjectId, //might have to change some things for the populate to work
+        ref: "Collection",
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId, //might have to change some things for the populate to work
+        ref: "Comment",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId, //might have to change some things for the populate to work
+        ref: "User",
+      },
+    ],
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`    
-    timestamps: true
+    // this second object adds extra properties: `createdAt` and `updatedAt`
+    timestamps: true,
   }
 );
 
-const User = model("User", userSchema);
+const UserModel = model("User", userSchema);
 
-module.exports = User;
+module.exports = UserModel;
