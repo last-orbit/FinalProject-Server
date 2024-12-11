@@ -10,9 +10,10 @@ router.post("/signup", async (req, res, next) => {
   const { email, password, username, image } = req.body;
   console.log("inside the post route", req.body);
   try {
+    const usernameAlreadyTaken = await UserModel.findOne({ username });
     const emailAlreadyTaken = await UserModel.findOne({ email });
-    if (emailAlreadyTaken) {
-      res.status(403).json({ message: "Invalid credentials" });
+    if (emailAlreadyTaken || usernameAlreadyTaken) {
+      res.status(409).json({ message: "Invalid credentials" });
     } else {
       const salt = bcryptjs.genSaltSync(12);
       const hashedPassword = bcryptjs.hashSync(password, salt);
@@ -70,17 +71,6 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-//**************delete user
-router.delete("/delete/:id", async (req, res, next) => {
-  try {
-    const deletedUser = await UserModel.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "User has been deleted", deletedUser });
-  } catch (error) {
-    console.log("error on deleting user", error);
-    next(error);
-  }
-});
-
 //**************verify
 router.get("/verify", isAuthenticated, (req, res, next) => {
   try {
@@ -89,6 +79,17 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
       currentUser: req.payload.currentUser,
     });
   } catch (error) {
+    next(error);
+  }
+});
+
+//**************delete user if we need to as well in an account page or something
+router.delete("/delete/:id", async (req, res, next) => {
+  try {
+    const deletedUser = await UserModel.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User has been deleted", deletedUser });
+  } catch (error) {
+    console.log("error on deleting user", error);
     next(error);
   }
 });

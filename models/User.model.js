@@ -24,18 +24,7 @@ const userSchema = new Schema(
       type: String,
       //
     },
-    collections: [
-      {
-        type: Schema.Types.ObjectId, //might have to change some things for the populate to work
-        ref: "Collection",
-      },
-    ],
-    comments: [
-      {
-        type: Schema.Types.ObjectId, //might have to change some things for the populate to work
-        ref: "Comment",
-      },
-    ],
+    isFakeUser: { type: Boolean, default: false },
     friends: [
       {
         type: Schema.Types.ObjectId, //might have to change some things for the populate to work

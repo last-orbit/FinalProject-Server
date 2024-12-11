@@ -5,6 +5,12 @@ const commentModel = require("../models/Comment.model");
 router.get("/:imageId", async (req, res, next) => {
   try {
     const comments = await commentModel.find({ image_id: req.params.imageId });
+    //   .populate("user_id");
+    // path: 'user',
+    // match: {
+    //   user_id: [ ], comment_id: []
+    //   ]
+    // }
     res.status(200).json({ message: "Here are your comments", comments });
   } catch (error) {
     next(error);
