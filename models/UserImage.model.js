@@ -3,12 +3,12 @@ const { Schema, model } = require("mongoose");
 const userImageSchema = new Schema(
   {
     imageId: {
-      type: mongoose.Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Image",
       required: true,
     },
     userId: {
-      type: mongoose.Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },

@@ -39,14 +39,15 @@ router.post("/addtocollection", async (req, res, next) => {
   }
 });
 //Remove an image to a user collection
-router.delete("/addtocollection", async (req, res, next) => {
+router.delete("/removefromcollection", async (req, res, next) => {
   const userId = req.body.userId;
   const imageId = req.body.imageId;
 
   try {
     //checking if the user and the image exist
     const user = await UserModel.findById(userId);
-    if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
+    if (!user)
+      return res.status(404).json({ message: "🤦‍♂️ User or image not found" });
     const image = await ImageModel.findById(imageId);
     if (!image)
       return res.status(404).json({ message: "🤦‍♂️ Image does not exist" });
@@ -73,8 +74,8 @@ router.delete("/addtocollection", async (req, res, next) => {
 });
 
 //Get user's collection
-router.get("/:userId", async (req, res) => {
-  const userId = req.body.userId;
+router.get("/:userId", async (req, res, next) => {
+  const userId = req.params.userId;
   try {
     //checking if the user exists
     const user = await UserModel.findById(userId);
@@ -82,7 +83,7 @@ router.get("/:userId", async (req, res) => {
 
     //retrieving all the relationship for the given user
     const userCollection = await UserImageModel.find({ userId });
-    if (!userCollection)
+    if (userCollection.length === 0)
       return res.status(200).json({ message: "🤷‍♂️ no image in collection" });
     res
       .status(200)

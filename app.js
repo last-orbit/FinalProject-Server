@@ -32,8 +32,8 @@ const imageRoutes = require("./routes/images.routes");
 app.use("/image", imageRoutes);
 
 // //🥰 UserImage Route
-// const UserImageRoutes = require("./routes/userImage.routes");
-// app.use("/collection", UserImageRoutes);
+const UserImageRoutes = require("./routes/userImage.routes");
+app.use("/collection", UserImageRoutes);
 
 // //💌 Comment Route
 // const commentRoutes = require("./routes/comments.routes");
