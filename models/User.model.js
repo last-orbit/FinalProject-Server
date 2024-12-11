@@ -22,7 +22,6 @@ const userSchema = new Schema(
     },
     image: {
       type: String,
-      //
     },
     isFakeUser: { type: Boolean, default: false },
     friends: [
