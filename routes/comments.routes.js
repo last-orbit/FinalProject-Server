@@ -2,33 +2,34 @@ const router = require("express").Router();
 const commentModel = require("../models/Comment.model");
 
 //get comments
-router.get("/", async (req, res) => {
-  const imageId = req.query.image_id;
+router.get("/:imageId", async (req, res, next) => {
   try {
-    const comments = await commentModel.find({ image_id: imageId });
-    res.status(200).json(comments);
+    const comments = await commentModel.find({ image_id: req.params.imageId });
+    res.status(200).json({ message: "Here are your comments", comments });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
 //post comment
-router.post("/create", async (req, res) => {
+router.post("/create", async (req, res, next) => {
   try {
     const newComment = await commentModel.create(req.body);
     res.status(201).json(newComment);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 
 //delete comment
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res, next) => {
   try {
     const deletedComment = await commentModel.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedComment);
+    res
+      .status(200)
+      .json({ message: "comment has been deleted", deletedComment });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 });
 

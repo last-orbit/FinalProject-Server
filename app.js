@@ -36,8 +36,8 @@ const UserImageRoutes = require("./routes/userImage.routes");
 app.use("/collection", UserImageRoutes);
 
 // //💌 Comment Route
-// const commentRoutes = require("./routes/comments.routes");
-// app.use("/comment", commentRoutes);
+const commentRoutes = require("./routes/comments.routes");
+app.use("/comment", commentRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

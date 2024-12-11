@@ -20,14 +20,16 @@ router.put("/update/:userId", async (req, res, next) => {
 });
 
 //Delete a user
-router.delete("/delete/:userId", async (req, res, next) => {
-  try {
-    const deletedUser = await UserModel.findByIdAndDelete(req.params.userId);
-    res.status(200).json({ message: "🥳 user deleted" });
-  } catch (error) {
-    next(err);
-  }
-});
+//🚨 DON'T DELETE USER FOR NOW
+//SINCE WE NEED TO ALSO DELETE COMMENTS AND COLLECTION OF THE USER
+// router.delete("/delete/:userId", async (req, res, next) => {
+//   try {
+//     const deletedUser = await UserModel.findByIdAndDelete(req.params.userId);
+//     res.status(200).json({ message: "🥳 user deleted" });
+//   } catch (error) {
+//     next(err);
+//   }
+// });
 
 //Add a friend to a specific user
 router.put("/togetheritsbetter/:userId/:friendId", async (req, res, next) => {

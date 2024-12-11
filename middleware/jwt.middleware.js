@@ -7,9 +7,9 @@ function isAuthenticated(req, res, next) {
       req.headers.authorization.split(" ")[1]
     ) {
       const theToken = req.headers.authorization.split(" ")[1];
-      const payLoad = jwt.verify(theToken, process.env.TOKEN_SECRET);
-      console.log("here is the payload", payLoad);
-      req.payLoad = { currentUser: payLoad };
+      const payload = jwt.verify(theToken, process.env.TOKEN_SECRET);
+      console.log("here is the payload", payload);
+      req.payload = { currentUser: payload };
       next();
     } else {
       res.status(403).json({ message: "no token present" });

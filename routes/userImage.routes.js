@@ -72,25 +72,62 @@ router.delete("/removefromcollection", async (req, res, next) => {
     next(err);
   }
 });
-
+// create a route of populating and pagination
 //Get user's collection
 router.get("/:userId", async (req, res, next) => {
-  const userId = req.params.userId;
   try {
+    //dealing with the request
+    const userId = req.params.userId;
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit); // end of the sample we want to display
+    const skip = (page - 1) * limit; // beginning of what we want to display
+
     //checking if the user exists
     const user = await UserModel.findById(userId);
     if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
 
     //retrieving all the relationship for the given user
-    const userCollection = await UserImageModel.find({ userId });
+    const userCollection = await UserImageModel.find({ userId })
+      .populate("imageId")
+      .skip(skip)
+      .limit(limit);
+    //getting the total images in user's collection
+    const totalImages = await UserImageModel.countDocuments({ userId });
     if (userCollection.length === 0)
       return res.status(200).json({ message: "🤷‍♂️ no image in collection" });
-    res
-      .status(200)
-      .json({ message: "🥳user collection found", userCollection });
+
+    //final response with pagination
+    res.status(200).json({
+      message: "🥳user collection found",
+      images: userCollection, //the array of all the images in the current skip/limit config
+      totalImages, //Nb of all images in the collection
+      totalPages: Math.ceil(totalImages / limit),
+      currentPage: page,
+    });
   } catch (err) {
     next(err);
   }
 });
+
+// router.get("/:userId", async (req, res, next) => {
+//   const userId = req.params.userId;
+//   try {
+//     //checking if the user exists
+//     const user = await UserModel.findById(userId);
+//     if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
+
+//     //retrieving all the relationship for the given user
+//     const userCollection = await UserImageModel.find({ userId }).populate(
+//       "imageId"
+//     );
+//     if (userCollection.length === 0)
+//       return res.status(200).json({ message: "🤷‍♂️ no image in collection" });
+//     res
+//       .status(200)
+//       .json({ message: "🥳user collection found", userCollection });
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 module.exports = router;

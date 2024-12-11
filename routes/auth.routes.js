@@ -10,17 +10,20 @@ router.post("/signup", async (req, res, next) => {
   const { email, password, username, image } = req.body;
   console.log("inside the post route", req.body);
   try {
-    //Email check to be coded
-    const salt = bcryptjs.genSaltSync(12);
-    const hashedPassword = bcryptjs.hashSync(password, salt);
-
-    const newUser = await UserModel.create({
-      email,
-      username,
-      password: hashedPassword,
-      image,
-    });
-    res.status(201).json({ message: "user has been created!", newUser });
+    const emailAlreadyTaken = await UserModel.findOne({ email });
+    if (emailAlreadyTaken) {
+      res.status(403).json({ message: "Invalid credentials" });
+    } else {
+      const salt = bcryptjs.genSaltSync(12);
+      const hashedPassword = bcryptjs.hashSync(password, salt);
+      const newUser = await UserModel.create({
+        email,
+        username,
+        password: hashedPassword,
+        image,
+      });
+      res.status(201).json({ message: "user has been created!", newUser });
+    }
   } catch (error) {
     next(error);
   }
@@ -66,12 +69,28 @@ router.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+//**************delete user
+router.delete("/delete/:id", async (req, res, next) => {
+  try {
+    const deletedUser = await UserModel.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User has been deleted", deletedUser });
+  } catch (error) {
+    console.log("error on deleting user", error);
+    next(error);
+  }
+});
+
 //**************verify
 router.get("/verify", isAuthenticated, (req, res, next) => {
-  res.status(200).json({
-    message: "All Humans must be Verified!!!",
-    currentUser: req.payLoad.currentUser,
-  });
+  try {
+    res.status(200).json({
+      message: "All Humans must be Verified!!!",
+      currentUser: req.payload.currentUser,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

@@ -4,12 +4,12 @@ const { Schema, model } = require("mongoose");
 const commentSchema = new Schema(
   {
     user_id: {
-      type: Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     image_id: {
-      type: Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Image",
       required: true,
     },
