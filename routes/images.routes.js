@@ -53,16 +53,16 @@ router.post("/create", async (req, res, next) => {
     .catch((err) => next(err));
 });
 
-//get random image
+//get random 10 images
 //DO ASYNC ROUTE
 router.get("/random", (req, res, next) => {
   console.log(req.body);
   imageModel
-    .aggregate([{ $sample: { size: 1 } }]) //fetches a random image
+    .aggregate([{ $sample: { size: 10 } }]) //fetches 10 random image
     .then((randomImage) => {
       if (randomImage.length > 0) {
-        res.status(200).json(randomImage[0]);
-        console.log("Random image was retrieved", randomImage[0]);
+        res.status(200).json(randomImage);
+        console.log("10 andom images have been retrieved", randomImage);
       } else {
         res.status(404).json({ message: "No images were found" });
       }
