@@ -39,15 +39,14 @@ router.post("/addtocollection", async (req, res, next) => {
   }
 });
 //Remove an image to a user collection
-router.delete("/removefromcollection", async (req, res, next) => {
+router.delete("/removefromcollection/", async (req, res, next) => {
   const userId = req.body.userId;
   const imageId = req.body.imageId;
 
   try {
     //checking if the user and the image exist
     const user = await UserModel.findById(userId);
-    if (!user)
-      return res.status(404).json({ message: "🤦‍♂️ User or image not found" });
+    if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
     const image = await ImageModel.findById(imageId);
     if (!image)
       return res.status(404).json({ message: "🤦‍♂️ Image does not exist" });
@@ -72,6 +71,42 @@ router.delete("/removefromcollection", async (req, res, next) => {
     next(err);
   }
 });
+
+//check if a relationship between user and image exists
+router.get("/isincollection", async (req, res, next) => {
+  const userId = req.body.userId;
+  const imageId = req.body.imageId;
+  try {
+    //checking if the user and the image exist
+    const user = await UserModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
+    const image = await ImageModel.findById(imageId);
+    if (!image)
+      return res.status(404).json({ message: "🤦‍♂️ Image does not exist" });
+
+    //checking if the relationship image/user alreadyu exists
+    const doesTheImageIsInUserCollection = await UserImageModel.find({
+      userId,
+      imageId,
+    });
+
+    if (!doesTheImageIsInUserCollection.length > 0) {
+      res
+        .status(200)
+        .json({
+          message: "🚨 image is not in collection",
+          isInCollection: false,
+        });
+    } else {
+      res
+        .status(200)
+        .json({ message: "🥳 image is in collection", isInCollection: true });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 // create a route of populating and pagination
 //Get user's collection
 router.get("/:userId", async (req, res, next) => {
