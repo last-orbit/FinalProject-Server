@@ -74,8 +74,8 @@ router.delete("/removefromcollection/", async (req, res, next) => {
 
 //check if a relationship between user and image exists
 router.get("/isincollection", async (req, res, next) => {
-  const userId = req.body.userId;
-  const imageId = req.body.imageId;
+const userId = req.query.userId;
+const imageId = req.query.imageId;
   try {
     //checking if the user and the image exist
     const user = await UserModel.findById(userId);
