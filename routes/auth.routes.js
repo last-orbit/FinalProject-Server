@@ -71,6 +71,8 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+//****************Update password */
+
 //**************verify
 router.get("/verify", isAuthenticated, (req, res, next) => {
   try {
