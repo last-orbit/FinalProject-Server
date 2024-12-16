@@ -74,8 +74,8 @@ router.delete("/removefromcollection/", async (req, res, next) => {
 
 //check if a relationship between user and image exists
 router.get("/isincollection", async (req, res, next) => {
-const userId = req.query.userId;
-const imageId = req.query.imageId;
+  const userId = req.query.userId;
+  const imageId = req.query.imageId;
   try {
     //checking if the user and the image exist
     const user = await UserModel.findById(userId);
@@ -91,12 +91,10 @@ const imageId = req.query.imageId;
     });
 
     if (!doesTheImageIsInUserCollection.length > 0) {
-      res
-        .status(200)
-        .json({
-          message: "🚨 image is not in collection",
-          isInCollection: false,
-        });
+      res.status(200).json({
+        message: "🚨 image is not in collection",
+        isInCollection: false,
+      });
     } else {
       res
         .status(200)
@@ -124,6 +122,7 @@ router.get("/:userId", async (req, res, next) => {
     //retrieving all the relationship for the given user
     const userCollection = await UserImageModel.find({ userId })
       .populate("imageId")
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
     //getting the total images in user's collection
