@@ -64,7 +64,7 @@ router.post("/login", async (req, res, next) => {
     } else {
       const otherError = new Error("Invalid email credentials");
       otherError.statusCode = 400;
-      throw other;
+      throw otherError;
     }
   } catch (error) {
     next(error);
