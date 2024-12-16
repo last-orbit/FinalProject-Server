@@ -4,7 +4,9 @@ const commentModel = require("../models/Comment.model");
 //get comments
 router.get("/:imageId", async (req, res, next) => {
   try {
-    const comments = await commentModel.find({ image_id: req.params.imageId });
+    const comments = await commentModel
+      .find({ image_id: req.params.imageId })
+      .sort({ createdAt: -1 });
     //   .populate("user_id");
     // path: 'user',
     // match: {
