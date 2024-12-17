@@ -144,4 +144,24 @@ router.get("/:userId", async (req, res, next) => {
   }
 });
 
+// Change Profile Picture via Cloudinary
+const uploader = require("../middleware/cloudinary.config.js");
+router.put('/upload/:userId', uploader.single("imageUrl"), async (req, res, next) => {
+    // the uploader.single() callback will send tnhe file to cloudinary and get you and obj with the url in return
+    console.log('file is: ', req.file, "user id", req.params.userId);
+
+  if (!req.file) {
+    console.log("there was an error uploading the file")
+    next(new Error('No file uploaded!'));
+    return;
+  } else {
+    const updatedUser = await UserModel.findByIdAndUpdate(req.params.userId, { image: req.file.path }, { new: true });
+    console.log("user image updated", updatedUser);
+    res.status(200).json({ message: "🥳 user image updated", updatedUser });
+  }
+
+})
+
+
+
 module.exports = router;
