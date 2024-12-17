@@ -122,6 +122,34 @@ router.delete(
   }
 );
 
+//Check of a relationship exists between the logged in user and a user
+router.get("/arefriends", async (req, res, next) => {
+  const userId = req.query.userId;
+  const friendId = req.query.friendId;
+
+  try {
+    //check if the user and the friend exist
+    const user = await UserModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found!" });
+    const friend = await UserModel.findById(friendId);
+    if (!friend)
+      return res.status(404).json({ message: "🤦‍♂️ Friend not found" });
+
+    //checking if the user has this friend ahas a friend
+    const areFriends = user.friends.includes(friendId);
+
+    if (areFriends) {
+      res.status(200).json({ message: "🥳 friendship", areFriends: true });
+    } else {
+      res
+        .status(200)
+        .json({ message: "🚨 They are not friends", areFriends: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 //Get all friends
 router.get("/allFriends/:userId", async (req, res, next) => {
   try {
