@@ -74,11 +74,12 @@ router.post("/login", async (req, res, next) => {
 //****************Update password */
 
 //**************verify
-router.get("/verify", isAuthenticated, (req, res, next) => {
+router.get("/verify", isAuthenticated, async (req, res, next) => {
   try {
+    const currentUser = await UserModel.findById(req.payload.currentUser._id);
     res.status(200).json({
       message: "All Humans must be Verified!!!",
-      currentUser: req.payload.currentUser,
+      currentUser,
     });
   } catch (error) {
     next(error);
