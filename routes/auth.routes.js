@@ -79,7 +79,11 @@ router.get("/verify", isAuthenticated, async (req, res, next) => {
     const currentUser = await UserModel.findById(req.payload.currentUser._id);
     res.status(200).json({
       message: "All Humans must be Verified!!!",
-      currentUser,
+      currentUser: {
+        _id: currentUser._id,
+        username: currentUser.username,
+        image: currentUser.image,
+      },
     });
   } catch (error) {
     next(error);
