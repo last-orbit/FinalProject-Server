@@ -164,4 +164,19 @@ router.get("/:userId", async (req, res, next) => {
 //   }
 // });
 
+
+//find users who like the image
+router.get('/likes/:imageId', (req, res, next) => {
+  try {
+    console.log(req);
+  const imageId = req.params.id;
+  UserModel.find({ likes: imageId }).then((users) => {
+    res.status(200).json(users);
+    console.log('Users who like the image:', users);
+  });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
