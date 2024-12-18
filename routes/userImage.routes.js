@@ -143,6 +143,40 @@ router.get("/:userId", async (req, res, next) => {
   }
 });
 
+//Get the userImage for all the users except the loggedin user
+router.get("/getalluserimages/:userId", async (req, res, next) => {
+  try {
+    //getting the current userId from request parameters
+    const loggedInUserId = req.params.userId;
+    //Page and limit for the query
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit); // end of the sample we want to display
+    const skip = (page - 1) * limit; // beginning of what we want to display
+
+    //checking if the user exists
+    const user = await UserModel.findById(loggedInUserId);
+    if (!user) return res.status(404).json({ message: "🤦‍♂️ User not found" });
+
+    //finding all the userImage documents that do not belong to the loggedin user
+    const otherUsersImages = await UserImageModel.find({
+      userId: { $ne: loggedInUserId },
+    })
+      .populate("userId")
+      .populate("imageId")
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(skip);
+    console.log(otherUsersImages);
+    res.status(200).json({
+      message: "🥳all users images found",
+      images: otherUsersImages,
+      currentPage: page,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // router.get("/:userId", async (req, res, next) => {
 //   const userId = req.params.userId;
 //   try {
