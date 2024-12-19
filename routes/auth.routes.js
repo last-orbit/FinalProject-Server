@@ -103,7 +103,8 @@ router.delete("/delete/:id", async (req, res, next) => {
 
 //**************get all users
 router.get('/users', async (req, res) => {
-  User.find()
+  newUser
+    .find()
     .then((allUsers) => {
       res.status(200).json({ message: 'Users found.', allUsers });
     })
