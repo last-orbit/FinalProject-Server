@@ -30,7 +30,7 @@ module.exports = (app) => {
   // );
     app.use(
       cors({
-        origin: 'https://projectartswap.netlify.app/', // Remplacez par l'URL exacte de votre frontend
+        origin: 'https://projectartswap.netlify.app', // Remplacez par l'URL exacte de votre frontend
         methods: 'GET,POST,PUT,DELETE', // Méthodes autorisées
         allowedHeaders: 'Content-Type,Authorization', // En-têtes autorisés
       })
