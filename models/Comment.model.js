@@ -1,4 +1,5 @@
 //This Comment model is used for all the comments of the app. It also sets a relationship between user and image
+// Here is an extra comment
 const { Schema, model } = require("mongoose");
 
 const commentSchema = new Schema(
