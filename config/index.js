@@ -28,13 +28,20 @@ module.exports = (app) => {
   //     origin: [FRONTEND_URL],
   //   })
   // );
-    app.use(
-      cors({
-        origin: 'https://projectartswap.netlify.app', // Remplacez par l'URL exacte de votre frontend
-        methods: 'GET,POST,PUT,DELETE', // Méthodes autorisées
-        allowedHeaders: 'Content-Type,authorization', // En-têtes autorisés
-      })
-    );
+  // app.use(
+  //   cors({
+  //     origin: 'https://projectartswap.netlify.app', // Remplacez par l'URL exacte de votre frontend
+  //     methods: 'GET,POST,PUT,DELETE', // Méthodes autorisées
+  //     allowedHeaders: 'Content-Type,authorization', // En-têtes autorisés
+  //   })
+  // );
+
+  app.use(
+    cors({
+      credentials: true,
+      origin: [FRONTEND_URL, "https://projectartswap.netlify.app"],
+    }),
+  );
 
   // In development environment the app logs
   app.use(logger("dev"));
