@@ -51,7 +51,7 @@ router.post("/login", async (req, res, next) => {
           algorithm: "HS256",
           expiresIn: "8h",
         });
-        console.log("here is the auth token", authToken);
+        // console.log("here is the auth token", authToken);
         res.status(200).json({
           message: "User has logged in",
           authToken,
