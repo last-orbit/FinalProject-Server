@@ -17,7 +17,8 @@ router.get("/:imageId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+}); 
+
 
 //post comment
 router.post("/create", async (req, res, next) => {

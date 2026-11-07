@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://127.0.0.1:27017/Final-Project";
-
+// Corrected Error with exposed password in the connection string.
 mongoose
   .connect(MONGO_URI)
   .then((x) => {
